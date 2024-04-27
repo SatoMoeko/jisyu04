@@ -326,7 +326,7 @@ class App:
     GAME OVER
 PUSH SPACE RESTART
 """
-            pyxel.text(120, 120, MESSAGE, pyxel.frame_count % 16)
+            pyxel.text(90, 120, MESSAGE, pyxel.frame_count % 16)
             return
         
     def reset(self):
