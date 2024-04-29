@@ -59,8 +59,8 @@ class Enemy2:
         self.pos = Vec2(0, 0)
         self.vec = 0
         self.size = 1
-        self.speed = 3
-        self.color = 7 # 0~15
+        self.speed = 2
+        self.color = pyxel.frame_count % 16 #7
 
     def update(self, x, y, dx, size, color):
         self.pos.x = x
@@ -171,7 +171,7 @@ class App:
                 break
 
         # ====== ctrl enemy2 =====
-        if pyxel.frame_count % 10 == 1:
+        if pyxel.frame_count % 18 == 1:
             new_enemy2 = Enemy2()
             new_enemy2.update(126, 16, 0, new_enemy2.size, new_enemy2.color)
             self.Enemy2s.append(new_enemy2)
@@ -312,6 +312,9 @@ class App:
         # ====== draw enemy2 ======
         for enemy2 in self.Enemy2s:
             pyxel.circ(enemy2.pos.x, enemy2.pos.y, enemy2.size, enemy2.color)
+
+        # ====== draw topEnemy ======
+        pyxel.blt(20, 3, 0, 20, 99, 216, 55, 6)
 
         # ====== draw near cloud ======
         offset = (pyxel.frame_count//2) % 160
