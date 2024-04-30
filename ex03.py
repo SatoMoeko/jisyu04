@@ -9,6 +9,8 @@ ENEMY_H = 20
 ENEMY_W = 20
 ENEMY2_H = 16
 ENEMY2_W = 256
+ARROW_H=15
+ARROW_W=5
 
 
 class Vec2:
@@ -54,7 +56,7 @@ class Enemy:
         self.pos.y = y
         self.vec = dx
 
-class Enemy2:
+class Enemy2: #かけら
     def __init__(self):
         self.pos = Vec2(0, 0)
         self.vec = 0
@@ -68,6 +70,18 @@ class Enemy2:
         self.vec = dx
         self.size = size
         self.color = color
+
+class Arrow:
+    def __init__(self,img_id):
+        self.pos = Vec2(0, 0)
+        self.vec = 0
+        self.speed = 3
+        self.img_arrow = img_id
+
+    def update(self, x, y, dx):
+        self.pos.x = x
+        self.pos.y = y
+        self.vec = dx
 
 class App:
     def __init__(self):
@@ -87,12 +101,14 @@ class App:
         self.Balls = []
         self.Enemies = []
         self.Enemy2s = []
+        self.Arrows = []
 
         # flag
         self.GameOver_flag = 0
         self.Start = False
         # Score
         self.Score = 0
+        self.Hisc=0
         # 体力
         self.hp = 1000
         #雲
@@ -165,12 +181,12 @@ class App:
                 if not self.GameOver_flag:
                     del self.Enemies[i] 
                     enemy_count -= 1
-                    self.hp -= 10
+                    self.hp -= 50
                     if self.hp <= 0:
                         self.GameOver_flag = 1
                 break
 
-        # ====== ctrl enemy2 =====
+        # ====== ctrl enemy2（かけら） =====
         if pyxel.frame_count % 18 == 1:
             new_enemy2 = Enemy2()
             new_enemy2.update(126, 16, 0, new_enemy2.size, new_enemy2.color)
@@ -222,6 +238,54 @@ class App:
                 enemy2_count -= 1 
                 break
         
+        # ====== ctrl arrow =====
+        if pyxel.frame_count % 29 == 1:
+            new_arrow = Arrow()
+            new_arrow.update(126, 16, 0)
+            self.Arrows.append(new_arrow)
+
+            new_arrow = Arrow()
+            new_arrow.update(129, 16, 0)
+            self.Arrows.append(new_arrow)
+        
+        if pyxel.frame_count % 19 == 1:
+            new_arrow = Arrow()
+            new_arrow.update(127, 16, 0)
+            self.Arrows.append(new_arrow)
+
+            new_arrow = Arrow()
+            new_arrow.update(130, 16, 0)
+            self.Arrows.append(new_arrow)
+
+        arrow_count = len(self.Arrows)
+        for i in range(arrow_count):
+            if 0 < self.Arrows[i].pos.y and self.Arrows[i].pos.y < WINDOW_H: #画面内なら
+                # arrow update
+                if i % 2 == 0:
+                    if self.Arrows[i].pos.x >128:
+                        self.Arrows[i].update(self.Arrows[i].pos.x+self.Arrows[i].speed, self.Arrows[i].pos.y+self.Enemy2s[i].speed, self.Arrows[i].vec)
+                    else:
+                        self.Arrows[i].update(self.Arrows[i].pos.x-self.Arrows[i].speed, self.Arrows[i].pos.y+self.Arrows[i].speed, self.Arrows[i].vec)
+                else:
+                    if self.Arrows[i].pos.x >128:
+                        self.Arrows[i].update(self.Arrows[i].pos.x+self.Arrows[i].speed/3, self.Arrows[i].pos.y+self.Arrows[i].speed, self.Enemy2s[i].vec)
+                    else:
+                        self.Arrows[i].update(self.Arrows[i].pos.x-self.Arrows[i].speed/3, self.Arrows[i].pos.y+self.Arrows[i].speed, self.Enemy2s[i].vec)
+                        
+                # 当たり判定(gemとarrow)
+                if ((self.mgem.pos.x < self.Arrows[i].pos.x) 
+                    and (self.Arrows[i].pos.x < self.mgem.pos.x + GEM_W)  
+                    and (self.mgem.pos.y < self.Arrows[i].pos.y) 
+                    and (self.Arrows[i].pos.y < self.mgem.pos.y + GEM_H)):
+                    # あたったら
+                    if not self.GameOver_flag:
+                        self.GameOver_flag = 1
+                    break
+            else: #画面外にいったら
+                del self.Arrows[i] 
+                arrow_count -= 1 
+                break
+
 
         # ====== ctrl Ball ======
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -280,20 +344,31 @@ class App:
         
         # ====== draw start ======
         if self.Start == False and self.GameOver_flag==0:
-            pyxel.text(100, 160, "PUSH SPACE KEY", pyxel.frame_count % 10)
+            pyxel.text(100, 160, "PUSH SPACE START", pyxel.frame_count % 10)
             pyxel.text(80, 80, "Land of lustrous fanGame", 12)
+            pyxel.text(102, 170, "ALT:how to play", 1)
+            #ALTで遊び方をみる
+            if pyxel.btn(pyxel.KEY_ALT):
+                pyxel.blt(100, 100, 0, 7, 64, 200, 200, 6) #数値仮
+                
+               
 
         # ====== draw score ======
-        score_x = 2
-        score_y = WINDOW_H-8
-        score = "SCORE:" + str(self.Score)
-        pyxel.text(score_x, score_y, score, 1)
+        if self.GameOver_flag == 0:
+            score_x = 40
+            score_y = WINDOW_H-8
+            score = "SCORE:" + str(self.Score)
+            highScore = "HIGH SCORE:"+str(self.Hisc)
+            pyxel.text(score_x, score_y, score, 1)
+            pyxel.text(2, 2, highScore, 1)
+
 
         # ====== draw hp ======
-        score_x = 50
-        score_y = WINDOW_H-8
-        score = "HP:" + str(self.hp)
-        pyxel.text(score_x, score_y, score, 1)
+        if self.GameOver_flag == 0:
+            score_x = 2
+            score_y = WINDOW_H-8
+            score = "HP:" + str(self.hp)
+            pyxel.text(score_x, score_y, score, 1)
 
         # ======= draw gem ========
         if self.mgem.vec > 0:
@@ -313,6 +388,10 @@ class App:
         for enemy2 in self.Enemy2s:
             pyxel.circ(enemy2.pos.x, enemy2.pos.y, enemy2.size, enemy2.color)
 
+        # ====== draw arrow ======
+        for arrow in self.Arrows:
+            pyxel.blt(arrow.pos.x, arrow.pos.y, 0, 32, 33, ARROW_W, ARROW_H, 6) #仮
+
         # ====== draw topEnemy ======
         pyxel.blt(20, 3, 0, 20, 99, 216, 55, 6)
 
@@ -324,12 +403,19 @@ class App:
 
         # ====== draw game over ======
         if self.GameOver_flag == 1:
+            if self.Score>self.Hisc:
+                self.Hisc=self.Score
+            score = "SCORE:" + str(self.Score)
+            highScore = "HIGH SCORE:"+str(self.Hisc)
+            pyxel.text(110, 120, score, 1)
+            pyxel.text(100, 130, highScore, 1)
+
             MESSAGE=\
 """
     GAME OVER
 PUSH SPACE RESTART
 """
-            pyxel.text(90, 120, MESSAGE, pyxel.frame_count % 16)
+            pyxel.text(self.mgem.pos.x-20, self.mgem.pos.y-10, MESSAGE, pyxel.frame_count % 16)
             return
         
     def reset(self):
