@@ -15,7 +15,7 @@
 
 # Features
 
-"hoge"のセールスポイントや差別化などを説明する
+効果音は鳴ります。
 
 # Requirement
 
@@ -29,27 +29,18 @@ pip install pyxel
 
 # Usage
 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
-
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
-```
-
-# Note
-
-- 操作方法
+### 操作方法
   スタート：スぺースキー
   遊び方：ALTキー
   プレイヤー操作：マウス
   攻撃：マウス左クリック
 
-- スコアについて
+# Note
+
+### スコアについて
   宝石の欠片：+100 (hp-5)
   月人:攻撃があたると+500 (接触hp-50)
   矢:あたるとgame over
-
 
 
 # Author
