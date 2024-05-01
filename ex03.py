@@ -106,7 +106,7 @@ class App:
         # flag
         self.GameOver_flag = 0
         self.Start = False
-        self.delE = 0
+        self.delE = (0,0)
         # Score
         self.Score = 0
         self.Hisc=0
@@ -282,6 +282,7 @@ class App:
                     and (self.Arrows[i].pos.y < self.mgem.pos.y + GEM_H)):
                     # あたったら
                     if not self.GameOver_flag:
+                        time.sleep(1)
                         self.GameOver_flag = 1
                         pyxel.play(0,2,loop=False)
                     break
@@ -325,7 +326,7 @@ class App:
                         and (self.Enemies[j].pos.y < self.Balls[i].pos.y) 
                         and (self.Balls[i].pos.y < self.Enemies[j].pos.y + ENEMY_H)):
                         # 消滅(敵インスタンス破棄)
-                        self.delE=1
+                        self.delE=(self.Enemies[j].pos.x,self.Enemies[j].pos.y)
                         del self.Enemies[j]
                         if not self.GameOver_flag:
                             pyxel.play(0,4,loop=False)
@@ -338,7 +339,6 @@ class App:
 
     def draw(self):
         pyxel.cls(0)
-        #pyxel.blt(self.IMG_ID0_X, self.IMG_ID0_Y, self.IMG_ID0, 0, 0, 38, 16)
 
         # ====== draw background ======
         pyxel.bltm(0, 0, 0, 0, 0, 256, 256, 0)
@@ -383,9 +383,10 @@ class App:
             for enemy in self.Enemies:
                 pyxel.blt(enemy.pos.x, enemy.pos.y, 0, 32, 33, ENEMY_W, ENEMY_H, 6)
                 
-        if self.delE ==1:
-            pyxel.blt(enemy.pos.x, enemy.pos.y, 0, 56, 56, 16, 24, 6)
-            self.delE=0
+        if self.delE !=(0,0):
+            x,y=self.delE
+            pyxel.blt(x, y, 0, 128, 9, 19, 23, 6)
+            self.delE=(0,0)
                 
         # ====== draw enemy2 ======
         if self.GameOver_flag == 0:
@@ -422,6 +423,15 @@ class App:
         for i in range(2):
             for x,y in self.near_cloud:
                 pyxel.blt(x+i*160-offset,y,0,1,16,53,15,6)
+
+        # ====== draw start ======
+        if self.Start == False and self.GameOver_flag==0:
+            pyxel.text(100, 160, "PUSH SPACE START", pyxel.frame_count % 10)
+            pyxel.text(80, 80, "Land of lustrous fanGame", 12)
+            pyxel.text(102, 170, "ALT:how to play", 1)
+            #ALTで遊び方をみる
+            if pyxel.btn(pyxel.KEY_ALT):
+                pyxel.blt(0, 50, 1, 0, 0, 256, 151, 6) 
 
         # ====== draw game over ======
         if self.GameOver_flag == 1:
