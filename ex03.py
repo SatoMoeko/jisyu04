@@ -65,7 +65,7 @@ class Enemy2: #かけら
         self.vec = 0
         self.size = 1
         self.speed = 2
-        self.color = pyxel.frame_count % 16 #7
+        self.color = pyxel.frame_count % 16
 
     def update(self, x, y, dx, size, color):
         self.pos.x = x
@@ -112,7 +112,7 @@ class App:
         self.Hisc=0
         # 体力
         self.hp = 1000
-        #雲
+        # 雲
         self.far_cloud=[(10,200),(30,128),(128,180),(70,30),(250,250)]
         self.near_cloud=[(50,230),(200,110)]
 
@@ -124,7 +124,7 @@ class App:
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
 
-        #スペースキーでスタート
+        #====== ctrl start ======
         if pyxel.btn(pyxel.KEY_SPACE):
             self.Start = True
         if self.GameOver_flag ==1 and pyxel.btn(pyxel.KEY_SPACE):
@@ -349,15 +349,6 @@ class App:
             for x,y in self.far_cloud:
                 pyxel.blt(x+i*160-offset,y,0,33,2,33,11,6)
 
-        # ====== draw start ======
-        if self.Start == False and self.GameOver_flag==0:
-            pyxel.text(100, 160, "PUSH SPACE START", pyxel.frame_count % 10)
-            pyxel.text(80, 80, "Land of lustrous fanGame", 12)
-            pyxel.text(102, 170, "ALT:how to play", 1)
-            #ALTで遊び方をみる
-            if pyxel.btn(pyxel.KEY_ALT):
-                pyxel.blt(0, 50, 1, 0, 0, 256, 151, 6) 
-
         # ====== draw hp ======
         if self.GameOver_flag == 0:
             score_x = 2
@@ -396,7 +387,6 @@ class App:
         # ====== draw arrow ======
         if self.GameOver_flag == 0:
             for arrow in self.Arrows:
-                #pyxel.blt(arrow.pos.x, arrow.pos.y, 0, 71,23, ARROW_W, ARROW_H, 6) 
                 if arrow.pos.x > 128:
                     pyxel.blt(arrow.pos.x, arrow.pos.y, 0, 71,23, ARROW_W, ARROW_H, 6) 
                 else:
