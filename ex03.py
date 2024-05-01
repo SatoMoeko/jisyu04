@@ -357,18 +357,6 @@ class App:
             #ALTで遊び方をみる
             if pyxel.btn(pyxel.KEY_ALT):
                 pyxel.blt(0, 50, 1, 0, 0, 256, 151, 6) 
-                
-               
-
-        # ====== draw score ======
-        if self.GameOver_flag == 0:
-            score_x = 40
-            score_y = WINDOW_H-8
-            score = "SCORE:" + str(self.Score)
-            highScore = "HIGH SCORE:"+str(self.Hisc)
-            pyxel.text(score_x, score_y, score, 1)
-            pyxel.text(2, 2, highScore, 1)
-
 
         # ====== draw hp ======
         if self.GameOver_flag == 0:
@@ -399,7 +387,6 @@ class App:
             pyxel.blt(enemy.pos.x, enemy.pos.y, 0, 56, 56, 16, 24, 6)
             self.delE=0
                 
-
         # ====== draw enemy2 ======
         if self.GameOver_flag == 0:
             for enemy2 in self.Enemy2s:
@@ -416,6 +403,15 @@ class App:
 
         # ====== draw background (かざり)======       
         pyxel.blt(0, 0, 1, 0, 152, 256, 70, 6)
+
+        # ====== draw score ======
+        if self.GameOver_flag == 0:
+            score_x = 40
+            score_y = WINDOW_H-8
+            score = "SCORE:" + str(self.Score)
+            highScore = "HIGH SCORE:"+str(self.Hisc)
+            pyxel.text(score_x, score_y, score, 1)
+            pyxel.text(2, 2, highScore, 1)
 
         # ====== draw topEnemy ======
         pyxel.blt(20, 3, 0, 20, 99, 216, 55, 6)
