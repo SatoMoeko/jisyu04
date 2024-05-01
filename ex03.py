@@ -348,7 +348,7 @@ class App:
         for i in range(2):
             for x,y in self.far_cloud:
                 pyxel.blt(x+i*160-offset,y,0,33,2,33,11,6)
-        
+
         # ====== draw start ======
         if self.Start == False and self.GameOver_flag==0:
             pyxel.text(100, 160, "PUSH SPACE START", pyxel.frame_count % 10)
@@ -356,8 +356,7 @@ class App:
             pyxel.text(102, 170, "ALT:how to play", 1)
             #ALTで遊び方をみる
             if pyxel.btn(pyxel.KEY_ALT):
-                pyxel.text(80, 130, "Land of lustrous fanGame", 7)
-                #pyxel.blt(60, 100, 0, 120, 0, 200, 80, 6) 
+                pyxel.blt(0, 50, 1, 0, 0, 256, 151, 6) 
                 
                
 
@@ -415,8 +414,12 @@ class App:
                 else:
                     pyxel.blt(arrow.pos.x, arrow.pos.y, 0, 72,47, ARROW_W, ARROW_H, 6) 
 
+        # ====== draw background (かざり)======       
+        pyxel.blt(0, 0, 1, 0, 152, 256, 70, 6)
+
         # ====== draw topEnemy ======
         pyxel.blt(20, 3, 0, 20, 99, 216, 55, 6)
+        
 
         # ====== draw near cloud ======
         offset = (pyxel.frame_count//8) % 160
