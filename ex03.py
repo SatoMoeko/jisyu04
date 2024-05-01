@@ -108,6 +108,7 @@ class App:
         self.Start = False
         self.delE = (0,0)
         # Score
+        self.Piece = 0
         self.Score = 0
         self.Hisc=0
         # 体力
@@ -231,6 +232,7 @@ class App:
                         pyxel.play(0,0,loop=False)
                         del self.Enemy2s[i] 
                         enemy2_count -= 1 
+                        self.Piece += 1
                         self.Score += 100
                         self.hp -=5
                         if self.hp <= 0:
@@ -400,8 +402,10 @@ class App:
             score_x = 40
             score_y = WINDOW_H-8
             score = "SCORE:" + str(self.Score)
+            piece= "PIECE:" + str(self.Piece)
             highScore = "HIGH SCORE:"+str(self.Hisc)
             pyxel.text(score_x, score_y, score, 1)
+            pyxel.text(score_x+50, score_y, piece, 1)
             pyxel.text(2, 2, highScore, 1)
 
         # ====== draw topEnemy ======
@@ -428,8 +432,10 @@ class App:
             pyxel.sounds[2].speed = 10
             if self.Score>self.Hisc:
                 self.Hisc=self.Score
+            piece= "PIECE:" + str(self.Piece)
             score = "SCORE:" + str(self.Score)
             highScore = "HIGH SCORE:"+str(self.Hisc)
+            pyxel.text(115, 110, piece, 1)
             pyxel.text(110, 120, score, 1)
             pyxel.text(100, 130, highScore, 1)
 
@@ -449,6 +455,7 @@ PUSH SPACE RESTART
         self.Start = False
         # Score
         self.Score = 0
+        self.Piece = 0
         # 体力
         self.hp = 1000
 
